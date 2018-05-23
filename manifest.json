@@ -3,24 +3,24 @@
   "name": "Drag To Go",
   "version": "1.0",
 
-  "description": "Test drag and drop feature.",
+  "description": "Drag and drop feature.",
 
   "icons": {
     "48": "icons/drag.png"
   },
 
   "background": {
-      "scripts": ["drag_to_go.js", "element_action.js"]
+      "scripts": ["background/drag_to_go.js", "background/element_action.js"]
   },
-
-  "permissions": [
-    "tabs"
-  ],
 
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["drag_drop_monitor.js", "background_message_builder.js"]
+      "js": ["content/drag_drop_monitor.js", "content/message_builder.js"]
     }
+  ],
+
+  "permissions": [
+    "tabs"
   ]
 }
