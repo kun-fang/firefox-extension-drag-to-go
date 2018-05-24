@@ -5,20 +5,21 @@
 
   "description": "Drag and drop feature.",
 
-  "icons": {
+  "icons":
+  {
     "48": "icons/drag.png"
   },
 
-  "background": {
-      "scripts": ["background/drag_to_go.js", "background/element_action.js"]
+  "background":
+  {
+    "scripts": ["background/drag_to_go.js"]
   },
 
   "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content/drag_drop_monitor.js", "content/message_builder.js"]
-    }
-  ],
+  {
+    "matches": ["<all_urls>"],
+    "js": ["content/drag_drop_monitor.js", "content/message_builder.js"]
+  }],
 
   "permissions": [
     "tabs"

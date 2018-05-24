@@ -1,12 +1,20 @@
-function getUnderlyingImages (element) {
-  images = [];
-  for (var i = 0; i < element.children.length; i += 1) {
-    var item = element.children[i];
-    if (item instanceof HTMLImageElement) {
-      images.push(item);
+function getUnderlyingImages(element) {
+  queue = [element];
+  while (queue.length > 0) {
+    new_queue = [];
+    for (var i = 0; i < queue.length; i += 1) {
+      var item = queue[i];
+      if (item instanceof HTMLImageElement) {
+        return [item];
+      } else {
+        for (var j = 0; j < item.children.length; j += 1) {
+          new_queue.push(item.children[j]);
+        }
+      }
     }
+    queue = new_queue;
   }
-  return images;
+  return [];
 }
 
 class BackgroundElementBuilder {
@@ -19,8 +27,8 @@ class BackgroundElementBuilder {
       };
     }
     if (element instanceof HTMLAnchorElement) {
-      images = getUnderlyingImages(element);
-      if (element.children.length == 0 && images.length == 0) {
+      var images = getUnderlyingImages(element);
+      if (element.children.length == 0 || images.length == 0) {
         return {
           "type": "anchor",
           "link": element.href

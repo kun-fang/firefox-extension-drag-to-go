@@ -34,7 +34,7 @@ class DragAndDrop {
 }
 
 class DragAndDropEventHandler {
-  constructor (dragAndDrop) {
+  constructor(dragAndDrop) {
     this.dragAndDrop = dragAndDrop;
   }
 
@@ -51,15 +51,12 @@ class DragAndDropEventHandler {
         this.dragAndDrop.clear();
       } else {
         this.dragAndDrop.setEnd(e.screenX, e.screenY);
-        var message = this.dragAndDrop.toJson();
-        message.messageId = "drag_drop_monitor";
-        browser.runtime.sendMessage(message);
+        browser.runtime.sendMessage(this.dragAndDrop.toJson());
       }
-    })  
+    })
   }
 
 }
-
 
 var dragAndDrop = new DragAndDrop();
 var eventHandler = new DragAndDropEventHandler(dragAndDrop);
