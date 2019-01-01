@@ -17,6 +17,7 @@ function getUnderlyingImages(element) {
   return [];
 }
 
+
 class BackgroundElementBuilder {
   static generateElement(element) {
     if (element instanceof HTMLImageElement) {

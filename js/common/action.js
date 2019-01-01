@@ -1,38 +1,14 @@
-var DirectionEnum = Object.freeze({
-  UP: "UP",
-  DOWN: "DOWN",
-  LEFT: "LEFT",
-  RIGHT: "RIGHT"
-});
-
-var dragToGoConfig = {
-  "img": {
-    "LEFT": "Open Image in Foreground",
-    "RIGHT": "Open Link in Background"
-  },
-  "anchor": {
-    "LEFT": "Open Link in Foreground",
-    "RIGHT": "Open Link in Background"
-  }
-};
-
-function getMoveDirection(message) {
-  return {
-    "horizontal": message.startX - message.endX < 0 ? DirectionEnum.RIGHT : DirectionEnum.LEFT,
-    "vertial": message.startY - message.endY < 0 ? DirectionEnum.UP : DirectionEnum.DOWN
-  }
-}
-
 class Action {
   withElement(element) {
     this.element = element;
     return this;
   }
 
-  constructor(action) {
-    this.action = action;
+  constructor(action_function) {
+    this.action = action_function;
   }
 }
+
 
 class DragAndDropActionBase {
   openUrlInBackground(url) {
@@ -46,6 +22,12 @@ class DragAndDropActionBase {
     browser.tabs.create({
       active: true,
       url: url
+    });
+  }
+
+  searchInNewTab(query) {
+    browser.search.search({
+      query: query
     });
   }
 
@@ -72,6 +54,7 @@ class LinkAction extends DragAndDropActionBase {
     };
   }
 }
+
 
 class ImageAction extends DragAndDropActionBase {
 
@@ -101,23 +84,28 @@ class ImageAction extends DragAndDropActionBase {
   }
 }
 
-var linkAction = new LinkAction();
-var imageAction = new ImageAction();
 
-function getActionObject(type) {
-  if (type === 'img') {
-    return imageAction;
+class TextAction extends DragAndDropActionBase {
+
+  search() {
+    super.searchInNewTab(this.element["text:"]);
   }
-  if (type === 'anchor') {
-    return linkAction;
+
+  getAllowedActions() {
+    return {
+      "Search in New Tab":  new Action(this.search)
+    };
   }
 }
 
-browser.runtime.onMessage.addListener((message) => {
-  var element = message.target;
-  var action = getActionObject(element.type);
-  var direction = getMoveDirection(message);
 
-  var actionName = dragToGoConfig[element.type][direction.horizontal];
-  action.getAllowedActions()[actionName].withElement(element).action();
-});
+var registeredActionMapping = {
+    "img": new ImageAction(),
+    "anchor": new LinkAction(),
+    "text": new TextAction()
+}
+
+
+var getAllowedActionsForType = function(type) {
+  return registeredActionMapping[type].getAllowedActions();
+}

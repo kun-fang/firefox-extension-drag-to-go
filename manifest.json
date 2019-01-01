@@ -3,25 +3,37 @@
   "name": "Drag To Go",
   "version": "1.0",
 
+  // "browser_specific_settings": {
+  //   "gecko": {
+  //     "id": "2859aac3-b9eb-47f7-a22d-23311938072f"
+  //   }
+  // },
+
   "description": "Drag and drop feature.",
 
-  "icons":
-  {
+  "icons": {
     "48": "icons/drag.png"
   },
 
-  "background":
-  {
-    "scripts": ["background/drag_to_go.js"]
+  "options_ui": {
+    "page": "html/options.html",
+    "open_in_tab": true
+  },
+
+  "background": {
+    "page": "html/background.html"
   },
 
   "content_scripts": [
-  {
-    "matches": ["<all_urls>"],
-    "js": ["content/drag_drop_monitor.js", "content/message_builder.js"]
-  }],
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content/drag_drop_monitor.js", "js/content/message_builder.js"]
+    }
+  ],
 
   "permissions": [
+    "search",
+    "storage",
     "tabs"
   ]
 }

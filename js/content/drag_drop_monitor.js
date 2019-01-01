@@ -33,6 +33,7 @@ class DragAndDrop {
   }
 }
 
+
 class DragAndDropEventHandler {
   constructor(dragAndDrop) {
     this.dragAndDrop = dragAndDrop;
@@ -58,8 +59,10 @@ class DragAndDropEventHandler {
 
 }
 
+
 var dragAndDrop = new DragAndDrop();
 var eventHandler = new DragAndDropEventHandler(dragAndDrop);
+
 
 eventHandler.registerDropEvent();
 eventHandler.registerDragStartEvent();
