@@ -1,7 +1,7 @@
 class DragAndDrop {
-  setTarget(element) {
+  setEvent(event) {
     this.clear();
-    this.element = element;
+    this.event = event;
   }
 
   setStart(x, y) {
@@ -22,9 +22,13 @@ class DragAndDrop {
     this.endY = undefined;
   }
 
+  getTarget() {
+    return BackgroundElementBuilder.generateElement(this.event);
+  }
+
   toJson() {
     return {
-      target: BackgroundElementBuilder.generateElement(this.element),
+      target: this.getTarget(),
       startX: this.startX,
       startY: this.startY,
       endX: this.endX,
@@ -41,14 +45,14 @@ class DragAndDropEventHandler {
 
   registerDragStartEvent() {
     document.addEventListener("dragstart", (e) => {
-      this.dragAndDrop.setTarget(e.target);
+      this.dragAndDrop.setEvent(e);
       this.dragAndDrop.setStart(e.screenX, e.screenY);
     })
   }
 
   registerDropEvent() {
     document.addEventListener("dragend", (e) => {
-      if (this.dragAndDrop.element !== e.target) {
+      if (this.dragAndDrop.event.target !== e.target) {
         this.dragAndDrop.clear();
       } else {
         this.dragAndDrop.setEnd(e.screenX, e.screenY);

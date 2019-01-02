@@ -19,7 +19,8 @@ function getUnderlyingImages(element) {
 
 
 class BackgroundElementBuilder {
-  static generateElement(element) {
+  static generateElement(event) {
+    var element = event.target;
     if (element instanceof HTMLImageElement) {
       return {
         "type": "img",
@@ -42,10 +43,10 @@ class BackgroundElementBuilder {
         }
       }
     }
-    if (element instanceof Text) {
+    else {
       return {
         "type": "text",
-        "text:": element.textContent
+        "text:": event.dataTransfer.getData("Text")
       }
     }
     return {};
