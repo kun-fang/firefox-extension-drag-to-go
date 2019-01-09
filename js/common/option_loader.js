@@ -29,7 +29,7 @@ class DragToGoOptionModel {
         .map(key => {
           return {
             "direction": DirectionEnum[key],
-            "action": options.options[key]
+            "action": options[key]
           };
         });
   }
@@ -55,7 +55,6 @@ var saveOptions = function(optionList) {
   }, {});
   var storage = {};
   storage[storageKey] = optionsJson;
-  console.log(storage);
   return browser.storage.local.set(storage);
 }
 
@@ -63,12 +62,12 @@ var saveOptions = function(optionList) {
 var getOptions = function() {
   options = [];
   return browser.storage.local.get(storageKey)
-      .then(response => response[storageKey])
+      .then(response => response[storageKey] || {})
       .then(optionsJson => DragElementTypeEnum.symbols().map(key => {
           if (!optionsJson[key]) {
             return new DragToGoOptionModel(DragElementTypeEnum[key], {});
           } else {
-            return new DragToGoOptionModel(DragElementTypeEnum[key], optionsJson[key]);
+            return new DragToGoOptionModel(DragElementTypeEnum[key], optionsJson[key].options);
           }
         })
       );
