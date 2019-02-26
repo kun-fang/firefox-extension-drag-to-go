@@ -31,6 +31,12 @@ class DragAndDropActionBase {
     });
   }
 
+  saveFile(url) {
+    browser.downloads.download({
+      url: url,
+    });
+  }
+
   getAllowedActions() {
     return {};
   }
@@ -74,8 +80,13 @@ class ImageAction extends DragAndDropActionBase {
     return super.openUrlInForeground(this.element.src);
   }
 
+  saveImage() {
+    return super.saveFile(this.element.src);
+  }
+
   getAllowedActions() {
     return {
+      "Save Image": new Action(this.saveImage),
       "Open Image in Background": new Action(this.openImageInBackground),
       "Open Image in Foreground": new Action(this.openImageInForeground),
       "Open Link in Background": new Action(this.openLinkInBackground),
