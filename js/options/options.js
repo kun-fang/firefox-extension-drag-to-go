@@ -209,7 +209,6 @@ class DragToGoOptionsSelect extends React.Component {
 
 
 getOptions().then(options => {
-  console.log("options is", options)
   return ReactDOM.render(
     React.createElement(
       DragToGoOptionsTabs,

@@ -10,18 +10,39 @@ class Action {
 }
 
 
+function getCurrentTab() {
+  return browser.tabs.query({currentWindow: true, active: true}).then(tabs => tabs[0]);
+}
+
+
 class DragAndDropActionBase {
+  openUrlInBackgroundWithSameContainer(url) {
+    getCurrentTab().then(tab => browser.tabs.create({
+      active: false,
+      url: url,
+      cookieStoreId: tab.cookieStoreId
+    }));
+  }
+
+  openUrlInForegroundWithSameContainer(url) {
+    getCurrentTab().then(tab => browser.tabs.create({
+      active: true,
+      url: url,
+      cookieStoreId: tab.cookieStoreId
+    }));
+  }
+
   openUrlInBackground(url) {
     browser.tabs.create({
       active: false,
-      url: url
+      url: url,
     });
   }
 
   openUrlInForeground(url) {
     browser.tabs.create({
       active: true,
-      url: url
+      url: url,
     });
   }
 
@@ -53,10 +74,20 @@ class LinkAction extends DragAndDropActionBase {
     return super.openUrlInForeground(this.element.link);
   }
 
+  openLinkInBackgroundWithSameContainer() {
+    return super.openUrlInBackgroundWithSameContainer(this.element.link);
+  }
+
+  openLinkInForegroundWithSameContainer() {
+    return super.openUrlInForegroundWithSameContainer(this.element.link);
+  }
+
   getAllowedActions() {
     return {
       "Open Link in Background": new Action(this.openLinkInBackground),
-      "Open Link in Foreground": new Action(this.openLinkInForeground)
+      "Open Link in Foreground": new Action(this.openLinkInForeground),
+      "Open Link in Background within the Same Container": new Action(this.openLinkInBackgroundWithSameContainer),
+      "Open Link in Foreground within the Same Container": new Action(this.openLinkInForegroundWithSameContainer)
     };
   }
 }
