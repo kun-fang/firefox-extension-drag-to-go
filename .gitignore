@@ -12,5 +12,10 @@
 .DS_Store
 Thumbs.db
 
+# Javascript
+node_modules
+package-lock.json
+
 # Project Specific
 release
+build
